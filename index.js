@@ -3,7 +3,7 @@ import morgan from 'morgan'; // ECMASCRIPT6
 import cors from 'cors'; // ECMASCRIPT6
 import path from 'path'; // ECMASCRIPT6 del path para deirle donde se encuentra nuestra carpeta publica
 import mongoose from 'mongoose';
-// import router from './routes';
+import router from './routes'; // importamos las rutas rutes (index.js)
 
 // ECMASCRIPT 5
 // const express=require('express');
@@ -28,6 +28,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname,'public'))); // se le indica la página de inicio (de archivos estaticsos que van a ser públicos)
+// al hacer referencia al api llamo al objeto router (que es quien va a gestionar las rutas, el index de la carpeta routes)
+app.use('/api',router);
 
 // Obtener el puerto que exista en el servicio y si no lo obtiene que meta el 3000, y ese valor se almacena en port
 app.set('PORT', process.env.PORT || 3000)
