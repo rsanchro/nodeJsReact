@@ -1,6 +1,6 @@
 import mongoose, {Schema} from 'mongoose';
 // importo mongose y el primer schema
-const cateoriaSchema = new Schema({
+const categoriaSchema = new Schema({
     // en la documentacion de la pagina oficial de mongoose aparecen estas características para cada dat
     nombre:{type:String, maxlength:50, unique:true, required:true},
     descripción: {type:String, maxlenght:255},
