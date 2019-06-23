@@ -3,7 +3,7 @@ import mongoose, {Schema} from 'mongoose';
 const categoriaSchema = new Schema({
     // en la documentacion de la pagina oficial de mongoose aparecen estas características para cada dat
     nombre:{type:String, maxlength:50, unique:true, required:true},
-    descripción: {type:String, maxlenght:255},
+    descripcion:{type:String, maxlength:50, required:true},
     estado: {type:Number,default:1},
     createdAt:{type:Date, default:Date.now}
 });

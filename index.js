@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname,'public'))); // se le indica la página de inicio (de archivos estaticsos que van a ser públicos)
 // al hacer referencia al api llamo al objeto router (que es quien va a gestionar las rutas, el index de la carpeta routes)
-app.use('/api',router);
+app.use('/api',router); // gestionamos al indicar /api en la ruta:3000 de localhost las rutas que con categorias forma /api/categorias apra crear la ruta dd, remove, etc... indicadas en su index
 
 // Obtener el puerto que exista en el servicio y si no lo obtiene que meta el 3000, y ese valor se almacena en port
 app.set('PORT', process.env.PORT || 3000)

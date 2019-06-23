@@ -46,8 +46,10 @@ export default {
   list: async (req, res, next) => {
     // lista
     try {
-      // create es una funcion de mongoose que envía una petición por por el body para almacenar ese objeto como un documento en la cateoria
-      const reg = await models.Categoria.find({}); // utilizamos el findOne de mongoose
+      let valor = req.query.valor; // filtros de búsquedas ( ordenando con sort y ocultando los datos que no queires que te traiga como el createdAt)
+      // create es una funcion de mongoose que envía una petición por por el body para almacenar ese objeto como un documento en la cateoria (busca en la propiedad nombre pero si no lo encuentra busca en la descripcion)
+      const reg = await models.Categoria.find({$or:[{'nombre': new RegExp(valor,'i')},{'descripcion': new RegExp(valor,'i')}]},{createdAt:0}) // el RegExp sería como el like de sql ( ej: http://localhost:3000/api/categoria/list?valor=cien)
+      .sort({'nombre':1}); // utilizamos el findOne de mongoose, por parámetros puede enviar (el 1º es la busqueda y 2º las que quieres ver) ordenados por nombre de manera descendete con 1 es asc
       res.status(200).json(reg);
     } catch (e) {
       res.status(500).send({
