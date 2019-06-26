@@ -1,6 +1,6 @@
 import models from "../models";
 // Utilizo el modulo de npm bcryptjs para encriptar la contraseña que añadan
-import bcrypt from 'bcryptjs';
+import bcrypt from "bcryptjs";
 // exporta funciones y objetos, clases o expresiones hacia fuera
 export default {
   // exporto funciones que van a llevar funciones
@@ -12,7 +12,7 @@ export default {
     // Next = devolución de llamada a la función de middleware
     try {
       // create es una funcion de mongoose que envía una petición por por el body para almacenar ese objeto como un documento en la cateoria
-      req.body.password = await bcrypt.hash(req.body.password,10);
+      req.body.password = await bcrypt.hash(req.body.password, 10);
       const reg = await models.Usuario.create(req.body);
       res.status(200).json(reg);
     } catch (e) {
@@ -27,7 +27,7 @@ export default {
     // consulta un Usuario y devuelve ese Usuario como respuesta
     try {
       // create es una funcion de mongoose que envía una petición por por el body para almacenar ese objeto como un documento en la cateoria
-      const reg = await models.Usuario.findOne({ '_id': req.query._id }); // param id = request_id que recibe de query. utilizamos el findOne de mongoose (asíq ue el objeto busca el documento con la id que recibrd en la query por el id)
+      const reg = await models.Usuario.findOne({ _id: req.query._id }); // param id = request_id que recibe de query. utilizamos el findOne de mongoose (asíq ue el objeto busca el documento con la id que recibrd en la query por el id)
       if (!reg) {
         // si no existe el Usuario
         res.status(404).send({
@@ -50,8 +50,16 @@ export default {
     try {
       let valor = req.query.valor; // filtros de búsquedas ( ordenando con sort y ocultando los datos que no queires que te traiga como el createdAt)
       // create es una funcion de mongoose que envía una petición por por el body para almacenar ese objeto como un documento en la cateoria (busca en la propiedad nombre pero si no lo encuentra busca en la descripcion)
-      const reg = await models.Usuario.find({$or:[{'nombre': new RegExp(valor,'i')},{'email': new RegExp(valor,'i')}]},{createdAt:0}) // el RegExp sería como el like de sql ( ej: http://localhost:3000/api/Usuario/list?valor=cien)
-      .sort({'nombre':1}); // utilizamos el findOne de mongoose, por parámetros puede enviar (el 1º es la busqueda y 2º las que quieres ver) ordenados por nombre de manera descendete con 1 es asc
+      const reg = await models.Usuario.find(
+        {
+          $or: [
+            { nombre: new RegExp(valor, "i") },
+            { email: new RegExp(valor, "i") }
+          ]
+        },
+        { createdAt: 0 }
+      ) // el RegExp sería como el like de sql ( ej: http://localhost:3000/api/Usuario/list?valor=cien)
+        .sort({ nombre: 1 }); // utilizamos el findOne de mongoose, por parámetros puede enviar (el 1º es la busqueda y 2º las que quieres ver) ordenados por nombre de manera descendete con 1 es asc
       res.status(200).json(reg);
     } catch (e) {
       res.status(500).send({
@@ -66,8 +74,8 @@ export default {
     try {
       let pas = req.body.password;
       // si el usuario tiene menos de 64caractreres es que ha cambiado al contraseña, porque un pass encriptado tiene 64caracteres
-      if (pas.length<64) {
-        req.body.password = await bcrypt.hash(req.body.password,10);
+      if (pas.length < 64) {
+        req.body.password = await bcrypt.hash(req.body.password, 10);
       }
       // create es una funcion de mongoose que envía una petición por por el body para almacenar ese objeto como un documento en la cateoria
       const reg = await models.Usuario.findByIdAndUpdate(
@@ -140,25 +148,30 @@ export default {
       next(e);
     }
   }, // las desactiva
-  login: async (req,res,next) =>{
+  login: async (req, res, next) => {
     try {
-      let user = await models.Usuario.findOne({email:req.body.email});
-      if (user){ // si existe un usuaro con ese email verifico contraseña correcta
-        let match = await bcrypt.compare(req.body.password, user.password); // comprar contraseñas, si true = ok
-        if (match){
-           res.json('Password correcto');
-        }else{
+      let user = await models.Usuario.findOne({ email: req.body.email }); // devuelve null si no existe el email
+      if (user) {
+        // si existe un usuaro con ese email verifico contraseña correcta
+        let match = await bcrypt.compare(req.body.password, user.password); // comparar contraseñas, si true = ok
+        if (match) {
+          res.json("Password correcto");
+        } else {
           res.status(404).send({
-            message:'PAssword incorrecto'
+            message: "Password incorrecto"
           });
         }
-      }else{
-        req.status(404).send({
-          message: 'No existe el usuario'
-        })
+      } else {
+        res.status(404).send({
+          message: "No existe el usuario"
+        });
       }
     } catch (e) {
-    
+      res.status(500).send({
+        message: "Erro en la comunicación"
+        // muestro el error con morgan
+      });
+      next(e);
     }
   }
 };
