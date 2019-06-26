@@ -1,6 +1,8 @@
 import models from "../models";
 // Utilizo el modulo de npm bcryptjs para encriptar la contraseña que añadan
 import bcrypt from "bcryptjs";
+import token from "../services/token"; // obtenemos con token toda slsa funciones que exporte service/token.js
+
 // exporta funciones y objetos, clases o expresiones hacia fuera
 export default {
   // exporto funciones que van a llevar funciones
@@ -155,7 +157,10 @@ export default {
         // si existe un usuaro con ese email verifico contraseña correcta
         let match = await bcrypt.compare(req.body.password, user.password); // comparar contraseñas, si true = ok
         if (match) {
-          res.json("Password correcto");
+          // res.json("Password e email correcto");
+          // Generacion del token con JWT.io npm install jsonwebtoken (datos de inicio de sesion con email y password) y devuelve al cliente y en cada petición  que realice el cliente debe enviar el token al back
+          let tokenReturn = await token.encode(user._id); // token a generar y devolver al cliente
+          res.status(200).json({user, tokenReturn});
         } else {
           res.status(404).send({
             message: "Password incorrecto"
@@ -167,8 +172,8 @@ export default {
         });
       }
     } catch (e) {
-      res.status(500).send({
-        message: "Erro en la comunicación"
+      res.status(404).send({
+        message: "Error en la comunicación"
         // muestro el error con morgan
       });
       next(e);
