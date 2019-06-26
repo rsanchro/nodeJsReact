@@ -1,6 +1,6 @@
 // express-promise-router  (para que devuelva promesas desde el middleware
 import routerx from "express-promise-router";
-import categoriaController from "../controllers/CategoriaControllers";
+import categoriaController from "../controllers/CategoriaController";
 
 const router = routerx();
 // método post - metodo del controlador al que hacemos referencia
@@ -11,6 +11,5 @@ router.put('/update',categoriaController.update);
 router.delete('/remove',categoriaController.remove);
 router.put('/activate',categoriaController.activate);
 router.put('/deactivate',categoriaController.deactivate);
-
 
 export default router;
