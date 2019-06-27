@@ -31,7 +31,7 @@ export default{
     decode: async (token) =>{
         try{
             // obtengo solo la propiedad _id del objeto completo
-            const {_id} = await jwt.verify(token,'!cosasmuylocasdeclavesecretas346@');
+            const {_id} = await jwt.verify(token,'!clavesecretamuyloca!#paragenerareltoken');
             const user = await models.Usuario.findOne({_id, estado:1}); // buscamos  ese id y si está activo
             if (user){
                 return user;
