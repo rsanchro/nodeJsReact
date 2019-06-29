@@ -3,6 +3,7 @@ import tokenService from '../services/token';
 export default{
     // Verifica que un usuario esté logueado correctamente (da igual que rol tenga)
     // El back genera el token y esa revisión pasa por el middleware (si existe el token evalua si está ok)
+   // tanto el administrador, vendedor y almacenero tendrían opciones de añadir 
     verifyUsuario: async (req, res,next) => {
         if (!req.headers.token){ // si no existe el token
             return res.status(404).send({

@@ -131,5 +131,28 @@ export default {
       });
       next(e);
     }
-  } // las desactiva
+  },
+  queryCodigo: async (req, res, next) => {
+    // consulta una Articulo y devuelve esa Articulo como respuesta
+    try {
+      // create es una funcion de mongoose que envía una petición por por el body para almacenar ese objeto como un documento en la cateoria
+      const reg = await models.Articulo.findOne({ codigo: req.query.codigo })
+      .populate('categoria',{nombre:1}) // sirve para relacionar, 1ºparam modelo, y 2º filtros (que quieres que te traiga); // param id = request_id que recibe de query. utilizamos el findOne de mongoose
+      if (!reg) {
+        // si no existe el Articulo
+        res.status(404).send({
+          // 404 not found
+          message: "El registro no existe"
+        });
+      } else {
+        res.status(200).send(reg); // si exite devuelves el registro
+      }
+    } catch (e) {
+      res.status(500).send({
+        message: "Ocurio un error al crear una Articulo"
+        // muestro el error con morgan
+      });
+      next(e);
+    }
+  }, // las desactiva
 };

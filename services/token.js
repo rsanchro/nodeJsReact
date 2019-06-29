@@ -38,7 +38,7 @@ export default{
             }else{
                 return false;
             }
-        }catch(e){
+        } catch(e){
             // en caso de eeror al decodificar, es posible que el token ya expirara y le devuelvo el token que estás recibiendo
             const newToken = await checkToken(token); // envía el token que recibes del cliente para chequear
             return newToken;
