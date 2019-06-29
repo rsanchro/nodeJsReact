@@ -14,6 +14,7 @@ import router from './routes'; // importamos las rutas rutes (index.js)
 
 // Conexión a la base de datos y nombre de bd
 mongoose.Promise=global.Promise;
+mongoose.set('useFindAndModify', false);
 const dbUrl = 'mongodb://localhost:27017/dbsistema';
 mongoose.connect(dbUrl, {useCreateIndex:true, useNewUrlParser: true})
 .then(mongoose => console.log('Conectando a la base de datos en el puerto 27017')) // si todo es correcto msg
